@@ -1,0 +1,9 @@
+[Interface]
+PrivateKey = {CLIENT_KEY}
+Address = {CLIENT_IP}
+
+[Peer]
+PublicKey = {HOST_PUB_KEY}
+AllowedIPs = {IP_SUBNET}
+Endpoint = {HOST_EXTERNAL_IP}:{HOST_PORT}
+PersistentKeepalive = 25
