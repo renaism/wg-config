@@ -1,0 +1,10 @@
+# Host settings
+[Interface]
+PrivateKey = {HOST_KEY}
+Address = {HOST_IP}
+ListenPort = {HOST_PORT}
+
+# Client settings
+[Peer]
+PublicKey = {CLIENT_PUB_KEY}
+AllowedIPs = {CLIENT_IP}
