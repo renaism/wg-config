@@ -74,8 +74,8 @@ nano /etc/wireguard/wg0.conf
 chmod 600 /etc/wireguard/wg0.conf
 ```
 
-- host `wg0.conf` template: (...), example: (...)
-- client `wg0.conf` template: (...), example: (...)
+- host `wg0.conf` [template](https://github.com/renaism/wg-selfhost/blob/main/config/host/wg0-basic.conf.template), [example](https://github.com/renaism/wg-selfhost/blob/main/config/host/wg0-basic.conf)
+- client `wg0.conf` [template](https://github.com/renaism/wg-selfhost/blob/main/config/client/wg0.conf.template), [example](https://github.com/renaism/wg-selfhost/blob/main/config/client/wg0.conf)
 
 Note that you can name the configuration file whatever you want. The filename (without the extension), which here is `wg0`, will also be the name of the virtual network adapter of the WireGuard network.
 
@@ -145,7 +145,7 @@ Add port forwarding and packet masquerading rules on `/etc/wireguard/wg0.conf`
 sudo nano /etc/wireguard/wg0.conf
 ```
 
-- host `wg0.conf` template: (...), example: (...)
+- host `wg0.conf` [template](https://github.com/renaism/wg-selfhost/blob/main/config/host/wg0-complete.conf.template), [example](https://github.com/renaism/wg-selfhost/blob/main/config/host/wg0-complete.conf)
 
 Restart WireGuard for the changes to take effect
 ```bash
