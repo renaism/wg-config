@@ -1,0 +1,18 @@
+# Host settings
+[Interface]
+PrivateKey = {HOST_KEY}
+Address = {HOST_IP}
+ListenPort = {HOST_PORT}
+
+# Port forwarding
+PreUp = iptables -t nat -A PREROUTING -i ens3 -p tcp --dport {HOST_PORT} -j DNAT --to-destination {CLIENT_IP}:{CLIENT_PORT}
+PostDown = iptables -t nat -D PREROUTING -i ens3 -p tcp --dport {HOST_PORT} -j DNAT --to-destination {CLIENT_IP}:{CLIENT_PORT}
+
+# Packet masquerading
+PreUp = iptables -t nat -A POSTROUTING -o wg0 -j MASQUERADE
+PostDown = iptables -t nat -D POSTROUTING -o wg0 -j MASQUERADE
+
+# Client settings
+[Peer]
+PublicKey = {CLIENT_PUB_KEY}
+AllowedIPs = {CLIENT_IP}
