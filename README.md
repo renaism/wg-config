@@ -2,7 +2,7 @@
 
 ## Introduction
 
-WireGuard technically does not have strict roles such as "client" or "server" like other VPNs. All peers in a WireGuard network are capable of performing task of a "client" or a "server". Hence, there are several common topologies used to configure a WireGuard network such as **Point to Point**, **Hub and Spoke**, **Point to Site**, and **Site to Site** [[1]](https://www.procustodibus.com/blog/2020/10/wireguard-topologies). 
+[WireGuard](https://www.wireguard.com/) technically does not have strict roles such as "client" or "server" like other VPNs. All peers in a WireGuard network are capable of performing task of a "client" or a "server". Hence, there are several common topologies used to configure a WireGuard network such as **Point to Point**, **Hub and Spoke**, **Point to Site**, and **Site to Site** [[1]](https://www.procustodibus.com/blog/2020/10/wireguard-topologies). 
 
 In this guide, we will tackle a problem commonly faced in self-hosting, which is how to expose your service to the internet and bypass CGNAT enforced by your Internet Service Provider (ISP). To do that, we will use the **Hub and Spoke** topology described in [[1]](https://www.procustodibus.com/blog/2020/10/wireguard-topologies) and do a slight modification to fit our needs. However, please note you would need to rent a VPS that has a public IP. This VPS does not need to have a high specifications as it only acts as a hub that forwards traffic to your home server in which where you actually host all your services.
 
@@ -11,7 +11,7 @@ In this guide, we will tackle a problem commonly faced in self-hosting, which is
 ![Hub and Spoke topology](https://www.procustodibus.com/images/blog/wireguard-topologies/hub-and-spoke-complex.svg)
 source: [https://www.procustodibus.com](https://www.procustodibus.com/blog/2020/10/wireguard-topologies)
 
-In a **Hub and Spoke**, also known as the *Star* topology, two clients running WireGuard are connected through a host which also running WireGuard. This two client usually are behind firewalls and NAT that does not allow initiating connection from the outside. However, the host should not have this limitation. The host acts as a router for the WireGuard clients in the network by forwarding the packets between clients . You can have more than two clients with this topology, but each connection between clients always come through that one host.
+In a **Hub and Spoke**, also known as the **Star** topology, two clients running WireGuard are connected through a host which also running WireGuard. This two client usually are behind firewalls and NAT that does not allow initiating connection from the outside. However, the host should not have this limitation. The host acts as a router for the WireGuard clients in the network by forwarding the packets between clients . You can have more than two clients with this topology, but each connection between clients always come through that one host.
 
 In this guide, we will only configure one client and one host as that will suffice our needs. Your home server will be the "client" or "endpoint" and the public VPS will be the "host". The people that will connect your services through the internet is not technically considered the "client" as they will not be part of the WireGuard network. They will access your services through the "host" by accessing its public IP, then the "host" will forward the traffic to your home server, the "client", with port-forwarding. The response from your home server then will be forwarded back by the "host" to the people that initially made the request.
 
@@ -63,7 +63,7 @@ wg genkey > client.key
 wg pubkey < client.key > client.pub
 ```
 
-`host.key` and 'host.pub' will contain the private key and public key for the host respectively. Where `client.key` and `client.pub` will contain the private key and public key  for the client respectively. Write down the keys from each file somewhere else like notepad. These keys will be used inside the WireGuard configuration file for the host and the client.
+The file `host.key` and `host.pub` will contain the private key and public key for the host respectively. Where `client.key` and `client.pub` will contain the private key and public key for the client respectively. Write down the keys from each file somewhere else like notepad. These keys will be used inside the WireGuard configuration file for the host and the client.
 
 ## Create Configuration File (host and client)
 
@@ -72,6 +72,7 @@ On both host and client, create a file named `wg0.conf` inside `/etc/wireguard` 
 sudo su
 nano /etc/wireguard/wg0.conf
 chmod 600 /etc/wireguard/wg0.conf
+exit
 ```
 
 - host `wg0.conf` [template](https://github.com/renaism/wg-selfhost/blob/main/config/host/wg0-basic.conf.template), [example](https://github.com/renaism/wg-selfhost/blob/main/config/host/wg0-basic.conf)
@@ -100,7 +101,7 @@ ping 10.16.0.2
 ```
 
 ## Enable IP Forwarding (host)
-If you successfully can ping the client from the host and vice versa, you already successfully established the WireGuard network. However, for the host to be able to forward incoming traffic to the client we need to enable and setup port forwarding. First, enable port forwarding on UFW configuration file located in `/etc/ufw/sysctl.conf`
+If you can successfully ping the client from the host and vice versa, you already successfully established the WireGuard network. However, for the host to be able to forward incoming traffic to the client we need to enable and setup port forwarding. First, enable port forwarding on UFW configuration file located in `/etc/ufw/sysctl.conf`
 ```bash
 sudo nano /etc/ufw/sysctl.conf
 ```
@@ -114,7 +115,7 @@ Un-comment these lines on that file
 ...
 ```
 
-so it become like this
+so they become like this
 ```
 ...
 net/ipv4/ip_forward=1
@@ -135,7 +136,7 @@ First, create a rule on UFW to allow forwarding traffic to port `8000/tcp` on th
 sudo ufw route allow to 10.16.0.2 port 8000 proto tcp
 ```
 
-Then create a rule to allow http access on the host
+Then create a rule to allow http access to the host
 ```bash
 sudo ufw allow http
 ```
