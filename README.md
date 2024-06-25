@@ -21,7 +21,7 @@ In this guide, we will use the `10.16.0.0/24` subnet for our WireGuard network. 
 
 We will also use port `51820/udp` on the "host" for accepting the WireGuard connection. WireGuard uses UDP for its peers to communicate with each other.
 
-On the "client", we will have a website that exposed on port `8080/tcp`.
+On the "client", we will have a website that exposed on port `8000/tcp`.
 
 
 ## Install WireGuard (host and client)
@@ -130,7 +130,7 @@ sudo systemctl restart ufw
 
 ## Add Forwarding Rule (host)
 
-First, create a rule on UFW to allow forwarding traffic to port `8080/tcp` on the client (`10.16.0.2`)
+First, create a rule on UFW to allow forwarding traffic to port `8000/tcp` on the client (`10.16.0.2`)
 ```bash
 sudo ufw route allow to 10.16.0.2 port 8000 proto tcp
 ```
